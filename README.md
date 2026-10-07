@@ -1,336 +1,299 @@
-\# Excel Arcade
-
-
+# Excel Arcade
 
 A collection of fully playable games built entirely inside Microsoft Excel using VBA.
 
-
-
 The project currently includes:
 
+- Chess
+- Blackjack
 
+Both games use Excel cells as the user interface while VBA handles game logic, state management, rule validation, and interaction.
 
-\- Chess
+No external game engine, graphics library, or additional dependency is required.
 
-\- Blackjack
+## Screenshots
 
+### Chess
 
+![Chess](screenshots/Chess.png)
 
-No external game engine or graphics library is required. The playable games are contained in the Excel workbook, while the exported VBA source code is included separately so the implementation can be reviewed directly on GitHub.
+### Blackjack
 
+![Blackjack](screenshots/Blackjack.png)
 
+---
 
-\## Screenshots
-
-
-
-\### Chess
-
-
-
-!\[Chess](screenshots/Chess.png)
-
-
-
-\### Blackjack
-
-
-
-!\[Blackjack](screenshots/Blackjack.png)
-
-
-
-\## Chess
-
-
+## Chess
 
 A fully playable chess implementation running entirely inside an Excel worksheet.
 
+Selecting a piece dynamically highlights its legal moves, while the VBA engine validates the game state before allowing a move.
 
+### Features
 
-\### Features
+- Legal movement for all chess pieces
+- Interactive legal move highlighting
+- Capture highlighting
+- Turn-based gameplay
+- King safety validation
+- Check detection
+- Checkmate detection
+- Stalemate detection
+- Pinned-piece handling
+- Discovered checks
+- Double-check handling through legal move validation
+- Kingside castling
+- Queenside castling
+- Castling-right tracking after king or rook movement
+- En passant
+- Pawn promotion
+- Underpromotion to rook, bishop, or knight
+- Threefold repetition draw claims
+- Fivefold repetition automatic draw
+- 50-move rule draw claims
+- 75-move rule automatic draw
+- Standard Algebraic Notation (SAN) move history
+- Last-move highlighting
+- Undo
+- New Game
 
+The engine prevents moves that would leave the player's own king in check, so legal moves are evaluated based on both piece movement and the resulting board state.
 
+Standard insufficient-material positions are also detected.
 
-\- Legal movement for all chess pieces
+---
 
-\- Interactive legal move highlighting
-
-\- Turn-based gameplay
-
-\- Captures
-
-\- King safety validation
-
-\- Check detection
-
-\- Checkmate detection
-
-\- Stalemate detection
-
-\- Pinned-piece handling
-
-\- Discovered checks
-
-\- Double-check handling through legal move validation
-
-\- Kingside castling
-
-\- Queenside castling
-
-\- Castling-right tracking after king or rook movement
-
-\- En passant
-
-\- Pawn promotion
-
-\- Underpromotion to rook, bishop, or knight
-
-\- Threefold repetition draw claims
-
-\- Fivefold repetition automatic draw
-
-\- 50-move rule draw claims
-
-\- 75-move rule automatic draw
-
-\- Standard Algebraic Notation (SAN) move history
-
-\- Last-move highlighting
-
-\- Undo
-
-\- New Game
-
-
-
-\## Blackjack
-
-
+## Blackjack
 
 A multiplayer Blackjack implementation using a persistent two-deck shoe.
 
+Instead of independently generating a random card every time a card is requested, the game creates two complete 52-card decks in memory, shuffles the resulting 104-card shoe, and draws cards sequentially from it.
 
+This means card probabilities naturally change throughout the shoe.
 
-Unlike a simple random-card generator, the game creates and shuffles two complete physical decks in memory. Cards are then drawn from that finite 104-card shoe until a new shoe is created.
+### Features
 
+- Real 104-card shoe
+- Two complete 52-card decks
+- Fisher-Yates shuffle
+- Persistent shoe across multiple rounds
+- Changing probabilities as cards leave the shoe
+- New Shoe control
+- Up to four players
+- Individual IN / OUT player selection
+- Optional dealer mode
+- Hidden dealer hole card
+- Dealer card is determined when dealt, not generated later
+- Hit
+- Stand
+- Double
+- Split
+- Split aces
+- Soft ace calculation
+- Natural blackjack detection
+- Split 21 treated separately from natural blackjack
+- Dealer stands on soft 17
+- Automatic dealer play
+- Win, loss, push, blackjack, and bust evaluation
+- Practice mode when the dealer is OUT
 
+Because the game uses a finite shoe, impossible card sequences cannot occur.
 
-\### Features
+For example, two decks contain exactly eight aces. If all eight aces have already been dealt, another ace cannot appear until a new shoe is created.
 
+The shoe also persists between rounds, so starting a new round does not reset the remaining cards.
 
+---
 
-\- Real 104-card shoe
-
-\- Two complete 52-card decks
-
-\- Fisher-Yates shuffle
-
-\- Persistent shoe across multiple rounds
-
-\- Changing probabilities as cards leave the shoe
-
-\- New Shoe control
-
-\- Up to four players
-
-\- Individual IN / OUT player selection
-
-\- Optional dealer mode
-
-\- Dealer hole card is drawn immediately but remains hidden
-
-\- Hit
-
-\- Stand
-
-\- Double
-
-\- Split
-
-\- Split aces
-
-\- Soft ace calculation
-
-\- Natural blackjack detection
-
-\- Split 21 treated separately from natural blackjack
-
-\- Dealer stands on soft 17
-
-\- Automatic dealer play
-
-\- Win, loss, push, blackjack, and bust evaluation
-
-\- Practice mode when the dealer is OUT
-
-
-
-Because the game uses a finite two-deck shoe, card availability is preserved correctly across rounds.
-
-
-
-For example, two decks contain exactly eight aces. If all eight aces have already been dealt, another ace cannot appear until the player creates a new shoe.
-
-
-
-\## Project Structure
-
-
+## Project Structure
 
 ```text
-
 excel-arcade-vba/
-
 |
-
 |-- ExcelArcade.xlsm
-
 |-- README.md
-
 |
-
 |-- src/
-
 |   |-- ChessEngine.bas
-
-|   `-- BlackjackEngine.bas
-
+|   |-- BlackjackEngine.bas
+|   |-- ChessBoard.cls
+|   |-- Blackjack.cls
+|   `-- ThisWorkbook.cls
 |
-
-|-- ChessBoard.cls
-
-|-- Blackjack.cls
-
-|-- ThisWorkbook.cls
-
-|
-
 `-- screenshots/
-
-&#x20;   |-- Chess.png
-
-&#x20;   `-- Blackjack.png
-
+    |-- Chess.png
+    `-- Blackjack.png
 ```
 
+---
 
+## Running the Project
 
-\## Running the Project
+1. Download `ExcelArcade.xlsm`.
+2. Open the workbook using Microsoft Excel for Windows.
+3. Enable macros when prompted.
+4. Open either the `Chess Board` or `Blackjack` worksheet.
+5. Play directly through the worksheet interface.
 
+The desktop version of Microsoft Excel with VBA support is required.
 
+---
 
-1\. Download `ExcelArcade.xlsm`.
+## Source Code
 
-2\. Open the file using Microsoft Excel for Windows.
-
-3\. Enable macros when prompted.
-
-4\. Open either the `Chess Board` or `Blackjack` worksheet.
-
-5\. Play directly through the worksheet interface.
-
-
-
-The project requires the desktop version of Microsoft Excel with VBA support.
-
-
-
-\## Source Code
-
-
-
-The playable workbook is provided as:
-
-
+The complete playable application is contained in:
 
 `ExcelArcade.xlsm`
 
+The VBA source is also exported separately so the implementation can be reviewed directly on GitHub.
 
+### Chess
 
-The VBA source code is also exported separately for easier inspection on GitHub.
+- `src/ChessEngine.bas`
+- `src/ChessBoard.cls`
 
+### Blackjack
 
+- `src/BlackjackEngine.bas`
+- `src/Blackjack.cls`
 
-\### Core Modules
+### Workbook Events
 
+- `src/ThisWorkbook.cls`
 
+---
 
-\- `src/ChessEngine.bas`
+## Technical Highlights
 
-\- `src/BlackjackEngine.bas`
+This project demonstrates:
 
+- Event-driven VBA programming
+- Game-state management
+- Rule-based validation
+- Interactive worksheet interfaces
+- State-dependent user controls
+- Algorithmic move generation
+- Move simulation for chess king safety
+- Finite-deck simulation
+- Fisher-Yates shuffling
+- Persistent state across multiple rounds
+- Unicode-based game rendering
+- Excel cell formatting as a lightweight user interface
+- Multi-player turn management
+- Multi-game architecture inside a single Excel workbook
 
+---
 
-\### Worksheet and Workbook Event Modules
+## Blackjack Shoe Design
 
+The Blackjack shoe is modeled as a real finite collection of cards.
 
+At the beginning of a new shoe:
 
-\- `ChessBoard.cls`
+```text
+2 decks x 52 cards = 104 cards
+```
 
-\- `Blackjack.cls`
+The game creates every card explicitly and then applies a Fisher-Yates shuffle.
 
-\- `ThisWorkbook.cls`
+Cards are drawn by advancing through the shuffled shoe rather than generating a new random rank and suit for every draw.
 
+Conceptually:
 
+```text
+Shuffled Shoe
+|
+|-- Card 1
+|-- Card 2
+|-- Card 3
+|-- ...
+`-- Card 104
+```
 
-\## Technical Highlights
+After a card is dealt, the next draw uses the next remaining card.
 
+A new random 104-card sequence is generated only when the player selects `NEW SHOE`.
 
+---
 
-The project demonstrates:
+## Chess Move Validation
 
+Chess moves are validated in two stages.
 
+First, the engine checks whether the selected piece can physically make the requested move.
 
-\- Event-driven programming with VBA
+Then the move is temporarily simulated to verify that the player's own king would remain safe.
 
-\- Game-state management
+Conceptually:
 
-\- Rule-based validation
+```text
+Select Piece
+     |
+Generate Candidate Move
+     |
+Check Piece Movement Rules
+     |
+Simulate Resulting Position
+     |
+Is Own King Safe?
+     |
+   Yes
+     |
+Legal Move
+```
 
-\- Interactive worksheet interfaces
+This allows the same system to handle checks, pins, discovered attacks, and other position-dependent restrictions.
 
-\- State-dependent user controls
+---
 
-\- Algorithmic move generation
+## Why Excel?
 
-\- King-safety simulation
+The goal of this project was to explore how far Microsoft Excel can be pushed beyond traditional spreadsheet use.
 
-\- Finite-deck simulation
+Excel provides the interface, but the workbook behaves more like a small event-driven application.
 
-\- Fisher-Yates shuffling
+The games use:
 
-\- Persistent state across multiple rounds
+- Worksheet cells as the visual interface
+- Cell selection events as user input
+- VBA modules as the game engines
+- Workbook state as persistent game state
+- Unicode characters for pieces and cards
+- Cell formatting for move and status feedback
 
-\- Unicode-based game rendering
+No external game framework is used.
 
-\- Excel cell formatting as a lightweight user interface
+---
 
-\- Multi-game architecture inside a single workbook
+## Built With
 
+- Microsoft Excel
+- VBA
 
+---
 
-\## Why Excel?
+## Current Games
 
+| Game | Status | Main Features |
+|---|---|---|
+| Chess | Playable | Legal moves, checkmate, castling, en passant, promotion, SAN history |
+| Blackjack | Playable | 2-deck shoe, 4 players, dealer, hit, stand, double, split |
 
+---
 
-The project explores how far Microsoft Excel can be pushed beyond traditional spreadsheet use.
+## Future Ideas
 
+Possible future additions include:
 
+- Additional Excel-based games
+- A central Excel Arcade home screen
+- Improved visual themes
+- Game statistics
+- Optional game settings
+- Additional Blackjack table-rule configurations
 
-Both games use Excel cells as the interface while VBA handles the underlying game logic, state management, validation, and interaction.
+---
 
+## Author
 
-
-No external game engine is used.
-
-
-
-\## Built With
-
-
-
-\- Microsoft Excel
-
-\- VBA
-
+Built as an experimental Excel/VBA game project exploring game logic, state management, and interactive spreadsheet interfaces.
